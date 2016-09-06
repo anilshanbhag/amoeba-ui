@@ -1,0 +1,145 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/css/app.css">
+        <title>Amoeba UI</title>
+        <script src="static/js/jquery-3.1.0.min.js"></script>
+        <script src="static/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <p class="text-center"><img src="static/img/amoeba.png" title="Amoeba UI"></p>
+                    <hr>
+                    <div class="list-group">
+                        <p class="text-center"><b> Select Dataset </b></p>
+                        <div class="dropdown" style="width:100%" id="select-dataset">
+                          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width:100%">
+                            Simple
+                            <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li><a href="#">Simple</a></li>
+                            <li><a href="#">Simple2</a></li>
+   <!--                         <li><a href="#">IoT</a></li>-->
+                            <!--<li><a href="#">TPC-H</a></li>-->
+                          </ul>
+                        </div>
+                    </div>
+                    <div class="list-group" id="select-workload">
+                        <p class="text-center"><b> Select Workload </b></p>
+                        <a href="#" class="list-group-item">Switching</a>
+                        <a href="#" class="list-group-item">Cyclic</a>
+                        <a href="#" class="list-group-item">Random</a>
+                        <a href="#" class="list-group-item">Custom</a>
+                    </div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item" id="cost-calc">Cost Calculator</a>
+                    </div>
+                    <div class="hidden" id="cost-calc-show">
+                    <div class="progress" >
+                      <div class="progress-bar progress-bar-success" style="width: 82%">
+                        <span class="sr-only">35% Complete (success)</span>
+                      </div>
+                      <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 16%">
+                        <span class="sr-only">20% Complete (warning)</span>
+                      </div>
+                      <div class="progress-bar progress-bar-danger" style="width: 2%">
+                        <span class="sr-only">10% Complete (danger)</span>
+                      </div>
+                    </div>
+
+                    <p>Total: 1.6x more expensive than uploading to HDFS<br><br>
+                    Sample: 0.26x<br>
+                    Create Tree: 0.02x<br>
+                    Write Partitions: 1.32x 
+                    </p>
+                    </div>
+                </div>
+                <div class="col-md-9" style="margin-top: 20px">
+                    <div id="queries">
+                    <form>
+                        <div class="form-group">
+                            <label for="query-text">Queries:</label>
+                            <textarea class="form-control" id="query-text" rows="5"></textarea>
+                        </div>
+                        <div class="form-inline">
+                            <div class="form-group">
+                            <label for="switch-after">Switch After:</label>
+                            <input type="number" class="form-control" id="switch-after" value="10" style="width:80px">
+                            </div>
+                            <div class="form-group">
+                            <label for="c">&nbsp; &nbsp; &nbsp; C: </label>
+                            <input type="text" class="form-control" id="c" value="4"  style="width: 80px;">
+                            </div>
+                            <div class="form-group">&nbsp; &nbsp; &nbsp;
+                            <button class="btn btn-default" id="run">Run &gt;</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                    <div id="viz" class="hidden">
+                        <div class="text-center">
+                        <div class="btn-group" data-toggle="buttons">
+                          <div id="linechartbtn" class="btn btn-primary active">
+                            <input type="radio" name="options" id="linechart" autocomplete="off" checked> Per Query
+                          </div>
+                          <div id="cdfchartbtn" class="btn btn-primary">
+                            <input type="radio" name="options" id="cdfchart" autocomplete="off"> Cumulative
+                          </div>
+                        </div>
+                        </div>
+                        <svg id="visualisation" width="800" height="350"></svg>
+                    </div>
+                    <div id="stats" class="hidden" style="margin-top:30px;">
+                      <!-- Nav tabs -->
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#runstats" role="tab" data-toggle="tab">Run Stats</a></li>
+                        <li role="presentation"><a href="#index-changes" role="tab" data-toggle="tab">Index Changes</a></li>
+                      </ul>
+
+                      <!-- Tab panes -->
+                      <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="runstats">
+
+                        <table class="table table-striped">
+                            <tr>
+                                <td>Number of Queries</td>
+                                <td id="num-queries"> 10</td>
+                            </tr>
+                            <tr>
+                                <td>Total Runtime with Amoeba</td>
+                                <td id="amoeba-runtime"> 10</td>
+                            </tr>
+                            <tr>
+                                <td>Total Runtime with just HDFS</td>
+                                <td id="just-hdfs">10</td>
+                            </tr>
+                            <tr>
+                                <td>Gain Ratio</td>
+                                <td id="gain-ratio"> 10</td>
+                            </tr>
+                            <tr>
+                                <td>Re-partitioning Rounds</td>
+                                <td id="repartitioning-rounds">10</td>
+                            </tr>
+                        </table>
+
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="index-changes">
+                            <h4>Initial Tree: </h4><p><span id="initialTree"></span></p>
+                            <h4>Final Tree: </h4><p><span id="finalTree"></span></p>
+                            <h4>Tree Changes</h4>
+                            <ul id="treeChanges"></ul>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="static/js/d3.v3.min.js" charset="utf-8"></script>
+        <script src="static/js/app.js"></script>
+    </body>
+</html>
